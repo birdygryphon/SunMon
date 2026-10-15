@@ -1,0 +1,12 @@
+{
+  "domain": "sunmon",
+  "name": "SunMon",
+  "codeowners": ["@birdygryphon"],
+  "config_flow": true,
+  "documentation": "https://github.com/birdygryphon/SunMon",
+  "integration_type": "device",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/birdygryphon/SunMon/issues",
+  "requirements": [],
+  "version": "0.14.0"
+}

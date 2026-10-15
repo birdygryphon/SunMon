@@ -1,0 +1,139 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Set up SunMon",
+        "description": "Reads the power and voltage of a SolarCount over RS485 (57600 baud, 8N1).",
+        "data": {
+          "serial_port": "Serial port",
+          "channels": "Number of channels",
+          "scan_interval": "Update interval",
+          "read_yields": "Read yields",
+          "trace_serial": "Log serial traffic (TRACE)"
+        },
+        "data_description": {
+          "serial_port": "The USB to RS485 adapter. Prefer the /dev/serial/by-id/... path, it stays the same after replugging.",
+          "channels": "How many SolarCount channels to read, starting with the first.",
+          "scan_interval": "How often the SolarCount is read.",
+          "read_yields": "Also reads the yield of the previous day, the previous hour, the previous month and the previous year of each channel, once a minute. Switch it off if your SolarCount does not answer these queries.",
+          "trace_serial": "Writes every byte sent and received to the Home Assistant log at level TRACE. Switch it off again after troubleshooting, it fills the log quickly."
+        }
+      },
+      "no_response": {
+        "title": "The SolarCount does not answer",
+        "description": "The serial port {port} opened, but the SolarCount did not answer. Check the wiring (A/B swapped?) and that it is powered.\n\nIf you set it up anyway, Home Assistant keeps trying to reach it in the background, and the sensors appear once it answers.",
+        "menu_options": {
+          "retry": "Try again",
+          "user": "Change settings",
+          "setup_anyway": "Set up anyway"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "The serial port could not be opened. Check the path and that no other program uses it.",
+      "unknown": "Unexpected error."
+    },
+    "abort": {
+      "already_configured": "This serial port is already configured."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Options",
+        "data": {
+          "channels": "Number of channels",
+          "scan_interval": "Update interval",
+          "read_yields": "Read yields",
+          "trace_serial": "Log serial traffic (TRACE)"
+        },
+        "data_description": {
+          "channels": "How many SolarCount channels to read, starting with the first.",
+          "scan_interval": "How often the SolarCount is read.",
+          "read_yields": "Also reads the yield of the previous day, the previous hour, the previous month and the previous year of each channel, once a minute. Switch it off if your SolarCount does not answer these queries.",
+          "trace_serial": "Writes every byte sent and received to the Home Assistant log at level TRACE. Switch it off again after troubleshooting, it fills the log quickly."
+        }
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "values_held": {
+        "name": "Values held",
+        "state_attributes": {
+          "channels": {
+            "name": "Channels"
+          }
+        }
+      }
+    },
+    "sensor": {
+      "channel_power": {
+        "name": "Channel {channel} power"
+      },
+      "channel_voltage": {
+        "name": "Channel {channel} voltage"
+      },
+      "rs485_requests": {
+        "name": "RS485 requests"
+      },
+      "rs485_read_ok": {
+        "name": "RS485 read OK"
+      },
+      "rs485_crc_errors": {
+        "name": "RS485 CRC errors"
+      },
+      "rs485_no_response": {
+        "name": "RS485 no response errors"
+      },
+      "rs485_unexpected": {
+        "name": "RS485 unexpected responses"
+      },
+      "channel_yield_previous_day": {
+        "name": "Channel {channel} yield previous day"
+      },
+      "channel_yield_previous_hour": {
+        "name": "Channel {channel} yield previous hour"
+      },
+      "channel_yield_previous_month": {
+        "name": "Channel {channel} yield previous month"
+      },
+      "channel_yield_previous_year": {
+        "name": "Channel {channel} yield previous year"
+      },
+      "sum_power": {
+        "name": "Sum of all channels power"
+      },
+      "sum_yield_previous_day": {
+        "name": "Sum of all channels yield previous day"
+      },
+      "sum_yield_previous_hour": {
+        "name": "Sum of all channels yield previous hour"
+      },
+      "sum_yield_previous_month": {
+        "name": "Sum of all channels yield previous month"
+      },
+      "sum_yield_previous_year": {
+        "name": "Sum of all channels yield previous year"
+      },
+      "total_energy": {
+        "name": "Total power generated"
+      },
+      "rs485_send_rate": {
+        "name": "RS485 send throughput"
+      },
+      "rs485_receive_rate": {
+        "name": "RS485 receive throughput"
+      },
+      "rs485_bytes_sent": {
+        "name": "RS485 bytes sent"
+      },
+      "rs485_bytes_received": {
+        "name": "RS485 bytes received"
+      },
+      "rs485_bus_load": {
+        "name": "RS485 bus load"
+      }
+    }
+  }
+}

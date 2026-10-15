@@ -1,0 +1,139 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "SunMon einrichten",
+        "description": "Liest Leistung und Spannung eines SolarCount über RS485 (57600 Baud, 8N1).",
+        "data": {
+          "serial_port": "Serielle Schnittstelle",
+          "channels": "Anzahl der Kanäle",
+          "scan_interval": "Aktualisierungsintervall",
+          "read_yields": "Erträge lesen",
+          "trace_serial": "Seriellen Datenverkehr protokollieren (TRACE)"
+        },
+        "data_description": {
+          "serial_port": "Der USB-RS485-Adapter. Am besten den Pfad /dev/serial/by-id/... verwenden, er bleibt nach dem Umstecken gleich.",
+          "channels": "Wie viele SolarCount-Kanäle gelesen werden, beginnend mit dem ersten.",
+          "scan_interval": "Wie oft der SolarCount abgefragt wird.",
+          "read_yields": "Liest zusätzlich einmal pro Minute den Ertrag des Vortags, der vorherigen Stunde, des Vormonats und des Vorjahres jedes Kanals. Ausschalten, falls der SolarCount diese Abfragen nicht beantwortet.",
+          "trace_serial": "Schreibt jedes gesendete und empfangene Byte mit der Stufe TRACE in das Home-Assistant-Protokoll. Nach der Fehlersuche wieder ausschalten, das Protokoll wächst schnell."
+        }
+      },
+      "no_response": {
+        "title": "Der SolarCount antwortet nicht",
+        "description": "Die Schnittstelle {port} wurde geöffnet, aber der SolarCount antwortet nicht. Verdrahtung prüfen (A/B vertauscht?) und ob er Strom hat.\n\nWird er trotzdem eingerichtet, versucht Home Assistant ihn im Hintergrund weiter zu erreichen, und die Sensoren erscheinen, sobald er antwortet.",
+        "menu_options": {
+          "retry": "Erneut versuchen",
+          "user": "Einstellungen ändern",
+          "setup_anyway": "Trotzdem einrichten"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Die serielle Schnittstelle konnte nicht geöffnet werden. Pfad prüfen und sicherstellen, dass kein anderes Programm sie verwendet.",
+      "unknown": "Unerwarteter Fehler."
+    },
+    "abort": {
+      "already_configured": "Diese serielle Schnittstelle ist bereits eingerichtet."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Optionen",
+        "data": {
+          "channels": "Anzahl der Kanäle",
+          "scan_interval": "Aktualisierungsintervall",
+          "read_yields": "Erträge lesen",
+          "trace_serial": "Seriellen Datenverkehr protokollieren (TRACE)"
+        },
+        "data_description": {
+          "channels": "Wie viele SolarCount-Kanäle gelesen werden, beginnend mit dem ersten.",
+          "scan_interval": "Wie oft der SolarCount abgefragt wird.",
+          "read_yields": "Liest zusätzlich einmal pro Minute den Ertrag des Vortags, der vorherigen Stunde, des Vormonats und des Vorjahres jedes Kanals. Ausschalten, falls der SolarCount diese Abfragen nicht beantwortet.",
+          "trace_serial": "Schreibt jedes gesendete und empfangene Byte mit der Stufe TRACE in das Home-Assistant-Protokoll. Nach der Fehlersuche wieder ausschalten, das Protokoll wächst schnell."
+        }
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "values_held": {
+        "name": "Werte gehalten",
+        "state_attributes": {
+          "channels": {
+            "name": "Kanäle"
+          }
+        }
+      }
+    },
+    "sensor": {
+      "channel_power": {
+        "name": "Kanal {channel} Leistung"
+      },
+      "channel_voltage": {
+        "name": "Kanal {channel} Spannung"
+      },
+      "rs485_requests": {
+        "name": "RS485 Anfragen"
+      },
+      "rs485_read_ok": {
+        "name": "RS485 Lesen OK"
+      },
+      "rs485_crc_errors": {
+        "name": "RS485 CRC-Fehler"
+      },
+      "rs485_no_response": {
+        "name": "RS485 Fehler keine Antwort"
+      },
+      "rs485_unexpected": {
+        "name": "RS485 unerwartete Antworten"
+      },
+      "channel_yield_previous_day": {
+        "name": "Kanal {channel} Ertrag Vortag"
+      },
+      "channel_yield_previous_hour": {
+        "name": "Kanal {channel} Ertrag vorherige Stunde"
+      },
+      "channel_yield_previous_month": {
+        "name": "Kanal {channel} Ertrag Vormonat"
+      },
+      "channel_yield_previous_year": {
+        "name": "Kanal {channel} Ertrag Vorjahr"
+      },
+      "sum_power": {
+        "name": "Summe aller Kanäle Leistung"
+      },
+      "sum_yield_previous_day": {
+        "name": "Summe aller Kanäle Ertrag Vortag"
+      },
+      "sum_yield_previous_hour": {
+        "name": "Summe aller Kanäle Ertrag vorherige Stunde"
+      },
+      "sum_yield_previous_month": {
+        "name": "Summe aller Kanäle Ertrag Vormonat"
+      },
+      "sum_yield_previous_year": {
+        "name": "Summe aller Kanäle Ertrag Vorjahr"
+      },
+      "total_energy": {
+        "name": "Gesamte erzeugte Leistung"
+      },
+      "rs485_send_rate": {
+        "name": "RS485 Durchsatz Senden"
+      },
+      "rs485_receive_rate": {
+        "name": "RS485 Durchsatz Empfangen"
+      },
+      "rs485_bytes_sent": {
+        "name": "RS485 gesendete Bytes"
+      },
+      "rs485_bytes_received": {
+        "name": "RS485 empfangene Bytes"
+      },
+      "rs485_bus_load": {
+        "name": "RS485 Buslast"
+      }
+    }
+  }
+}
