@@ -387,6 +387,7 @@ For reference, the state machine in
 
 ```mermaid
 stateDiagram-v2
+    direction LR
     [*] --> SOL_QUERY_TIME
     SOL_QUERY_TIME --> SOL_WAIT_FOR_TIME_RSP: send 04
     SOL_WAIT_FOR_TIME_RSP --> SOL_QUERY_LASTDAY_YIELD: clock received
