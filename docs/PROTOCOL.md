@@ -388,27 +388,39 @@ For reference, the state machine in
 ```mermaid
 stateDiagram-v2
     direction LR
-    [*] --> SOL_QUERY_TIME
-    SOL_QUERY_TIME --> SOL_WAIT_FOR_TIME_RSP: send 04
-    SOL_WAIT_FOR_TIME_RSP --> SOL_QUERY_LASTDAY_YIELD: clock received
-    SOL_QUERY_LASTDAY_YIELD --> SOL_QUERY_LASTDAY_YIELD_WAIT_REPLY: send day query, next channel
-    SOL_QUERY_LASTDAY_YIELD_WAIT_REPLY --> SOL_QUERY_LASTDAY_YIELD: answer
-    SOL_QUERY_LASTDAY_YIELD --> SOL_QUERY_LASTHOUR_YIELD: all 6 channels done
-    SOL_QUERY_LASTHOUR_YIELD --> SOL_QUERY_LASTHOUR_YIELD_WAIT_REPLY: send hour query, next channel
-    SOL_QUERY_LASTHOUR_YIELD_WAIT_REPLY --> SOL_QUERY_LASTHOUR_YIELD: answer
-    SOL_QUERY_LASTHOUR_YIELD --> SOL_NO_INIT: all 6 channels done
-    SOL_NO_INIT --> SOL_SENT_INIT: send 21
-    SOL_SENT_INIT --> SOL_CHAN: any answer
-    SOL_CHAN --> SOL_CHAN_WAIT_REPLY: send 20, next channel
-    SOL_CHAN_WAIT_REPLY --> SOL_CHAN: answer
-    SOL_CHAN --> SOL_FINISHED: all 6 channels done
-    SOL_FINISHED --> SOL_QUERY_TIME: a minute since the last clock query
-    SOL_FINISHED --> SOL_NO_INIT: otherwise, next cycle
-    note right of SOL_QUERY_TIME
-        From any state: no progress for 2 s
-        restarts at SOL_QUERY_TIME
-    end note
+    [*] --> YieldRound
+
+    state "Yield round, once a minute" as YieldRound {
+        direction TB
+        [*] --> SOL_QUERY_TIME
+        SOL_QUERY_TIME --> SOL_WAIT_FOR_TIME_RSP: send 04
+        SOL_WAIT_FOR_TIME_RSP --> SOL_QUERY_LASTDAY_YIELD: clock received
+        SOL_QUERY_LASTDAY_YIELD --> SOL_QUERY_LASTDAY_YIELD_WAIT_REPLY: day query
+        SOL_QUERY_LASTDAY_YIELD_WAIT_REPLY --> SOL_QUERY_LASTDAY_YIELD: answer
+        SOL_QUERY_LASTDAY_YIELD --> SOL_QUERY_LASTHOUR_YIELD: 6 channels done
+        SOL_QUERY_LASTHOUR_YIELD --> SOL_QUERY_LASTHOUR_YIELD_WAIT_REPLY: hour query
+        SOL_QUERY_LASTHOUR_YIELD_WAIT_REPLY --> SOL_QUERY_LASTHOUR_YIELD: answer
+        SOL_QUERY_LASTHOUR_YIELD --> [*]: 6 channels done
+    }
+
+    state "Measuring cycle" as Cycle {
+        direction TB
+        [*] --> SOL_NO_INIT
+        SOL_NO_INIT --> SOL_SENT_INIT: send 21
+        SOL_SENT_INIT --> SOL_CHAN: any answer
+        SOL_CHAN --> SOL_CHAN_WAIT_REPLY: send 20
+        SOL_CHAN_WAIT_REPLY --> SOL_CHAN: answer
+        SOL_CHAN --> SOL_FINISHED: 6 channels done
+        SOL_FINISHED --> SOL_NO_INIT: next cycle
+        SOL_FINISHED --> [*]: a minute since the last clock query
+    }
+
+    YieldRound --> Cycle
+    Cycle --> YieldRound
 ```
+
+From any state, no progress for 2 seconds restarts the whole sequence at
+`SOL_QUERY_TIME`.
 
 ## Differences between SunMon and the firmware
 
