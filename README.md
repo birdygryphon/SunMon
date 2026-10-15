@@ -321,3 +321,25 @@ Home Assistant they are two different integrations (`sunmon` and
 | `hacs.json` | Name and minimum Home Assistant version for HACS |
 | `docs/PROTOCOL.md` | The SolarCount UART protocol |
 | `firmware/SolarCountUART.c` | The original firmware source the protocol was worked out from |
+| `tests/test_solarcount.py` | Tests of the protocol and the client |
+| `pyproject.toml` | Settings for the code checkers ruff and mypy |
+
+## Tests
+
+`tests/test_solarcount.py` checks the protocol against known request and
+response frames and runs the client against a simulated SolarCount on a
+virtual serial port. It needs neither Home Assistant nor hardware, but it needs
+Linux or macOS for the virtual serial port:
+
+```
+python3 -m unittest discover -s tests -v
+```
+
+The code is checked with [ruff](https://docs.astral.sh/ruff/) and
+[mypy](https://mypy-lang.org/), configured in `pyproject.toml`:
+
+```
+ruff check .
+ruff format --check .
+mypy custom_components/sunmon tests
+```
