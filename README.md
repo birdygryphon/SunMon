@@ -50,3 +50,8 @@ For troubleshooting: RS485 counters, throughput and bus load, and a
 Connect the adapter's A and B terminals to the SolarCount's RS485 A and B. If
 the setup dialog reports that the SolarCount does not answer, the usual cause
 is A and B being swapped.
+
+## Protocol
+
+The UART protocol, with frame layouts, examples and flow diagrams, is
+documented in [docs/PROTOCOL.md](docs/PROTOCOL.md).
