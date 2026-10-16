@@ -51,7 +51,7 @@ is A and B being swapped.
 ## Install with HACS
 
 1. In HACS, open the menu at the top right and choose **Custom repositories**.
-2. Add `https://github.com/birdygryphon/SunMon` with the type **Integration**.
+2. Add `https://github.com/snbk40/SunMon` with the type **Integration**.
 3. Search for **SunMon** in HACS and download it.
 4. Restart Home Assistant, then continue with step 3 of the manual install.
 
